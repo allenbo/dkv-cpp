@@ -1,12 +1,14 @@
 #ifndef __DKV_STATUS_HPP__
 #define __DKV_STATUS_HPP__
 
+#include "networking/buffer.hpp"
+
 namespace dkv {
 
 class Status {
   public:
 
-    enum class Code {
+    enum class Code : char {
       OK,
 
       HANDLER_EXIST,
@@ -25,6 +27,9 @@ class Status {
     Status(const Status& o) : code_(o.code_) {}
 
     inline bool ok() { return code_ == Code::OK; }
+
+    Status from_buffer(networking::Buffer& buf);    
+    networking::Buffer to_buffer();
 
   private:
 

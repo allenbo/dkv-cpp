@@ -10,7 +10,7 @@ Server::Server(std::string addr)
   channels_.clear();
 }
 
-Server::~Server() {
+Served::~Server() {
   if (!stop_){
     stop()
   }
@@ -82,15 +82,21 @@ void Server::handle_request(Channel* ch, Buffer& buf) {
   Request req;
   Status st = req.from_buffer(buf);
 
-  if (!st.ok()) {
-    // send out error response
-    //ch->isend(resp.to_buffer());
-  } else {
+  networking::Buffer st_buffer = st.to_buffer();
+
+  if (st.ok()) {
     // send out a buffer
-    networking::Buffer buffer;
-    st = cache_->process(req, buffer);
-    ch->isend(buffer);
+    networking::Buffer resp_buffer;
+    st = cache_->process(req, resp_buffer);
+
+    st_buffer = st.to_buffer();
+    // concatenate status and response
+    if (st.ok()) {
+      st_buffer.append(resp_buffer);
+    }
+
   }
+  ch->isend(st_buffer);
 }
 
 }

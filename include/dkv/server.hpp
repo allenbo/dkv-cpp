@@ -68,7 +68,7 @@ class Server : public Asio {
 
   private:
 
-    Cache                   *cache_;
+    Cache                   *cache_;   // a thread safe cache
     Acceptor                acceptor_; // accept remote connections
     std::map<int, Channel*> channels_; // keep alive connections into channels
 
