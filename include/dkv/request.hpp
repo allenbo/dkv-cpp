@@ -6,7 +6,7 @@
 
 namespace dkv {
 
-enum class ReqType : char {
+enum class ReqType : unsigned char {
   REQ_UNDEFINED = 0,
   REQ_GET,
   REQ_SET,
@@ -25,7 +25,7 @@ struct Request {
 
   networking::Buffer to_buffer();
 
-  Status from_buffer(const networking::Buffer& buffer);
+  Status from_buffer(networking::Buffer& buffer);
 };
 
 }

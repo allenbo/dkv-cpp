@@ -19,7 +19,7 @@ class Cache {
 
   private:
 
-    HashTable     *table_;
+    Hashtable     *table_;
     common::Mutex *lock_;
 
     // no copy

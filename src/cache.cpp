@@ -15,9 +15,10 @@ Cache::~Cache() {
 
 Status Cache::process(Request& req, networking::Buffer& res) {
   common::ScopeLock _(lock_);
+  Item* r = nullptr;
   switch(req.type) {
     case ReqType::REQ_GET:
-      Item* r = table_.get(req.key, req.key_len);
+      r = table_->get(req.key, req.key_len);
       if (r == nullptr) {
         return Status(Status::Code::MAP_KEY_MISSING);
       }
@@ -25,10 +26,10 @@ Status Cache::process(Request& req, networking::Buffer& res) {
       return Status();
       break;
     case ReqType::REQ_SET:
-      return table_.set(req.key, req.key_len, req.value, req.val_len);
+      return table_->set(req.key, req.key_len, req.value, req.val_len);
       break;
     case ReqType::REQ_DEL:
-      Item* r = table_.del(req.key, req.key_len);
+      r = table_->del(req.key, req.key_len);
       if (r == nullptr) {
         return Status(Status::Code::MAP_KEY_MISSING);
       }

@@ -2,6 +2,7 @@
 #define __DKV_STDMAP_HPP__
 
 #include "dkv/hashtable.hpp"
+#include <unordered_map>
 
 #include <map>
 

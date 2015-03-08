@@ -17,7 +17,7 @@ Status  Status::from_buffer(Buffer& buf) {
 
 Buffer Status::to_buffer() {
   Buffer buf;
-  buf.writeByte(((Buffer::Byte)code_);
+  buf.writeByte((Buffer::Byte)code_);
   return buf;
 }
 

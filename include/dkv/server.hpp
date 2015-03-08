@@ -2,11 +2,10 @@
 #define __DKV_SERVER_HPP__
 
 #include <string>
-#include "dkv/networking/buffer.hpp"
-#include "dkv/networking/channel.hpp"
-#include "dkv/networking/acceptor.hpp"
+#include "networking/buffer.hpp"
+#include "networking/channel.hpp"
+#include "networking/acceptor.hpp"
 #include "dkv/request.hpp"
-#include "dkv/response.hpp"
 #include "dkv/cache.hpp"
 
 #include "common/all.hpp"
@@ -69,7 +68,7 @@ class Server : public Asio {
   private:
 
     Cache                   *cache_;   // a thread safe cache
-    Acceptor                acceptor_; // accept remote connections
+    Acceptor                *acceptor_; // accept remote connections
     std::map<int, Channel*> channels_; // keep alive connections into channels
 
     common::ThreadPool      pool_;
@@ -77,7 +76,7 @@ class Server : public Asio {
     bool                    stop_;
     common::Mutex           map_change_mutex_;
 
-    void handle_request(Channel* ch, Buffer& buf);
+    void handle_request(Channel* ch, Buffer buf);
 
     // no copy
     Server(const Server&);

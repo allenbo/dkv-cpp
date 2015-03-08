@@ -10,21 +10,24 @@ Request::Request()
       value(nullptr), val_len(0) {
 }
 
-Status from_buffer(const Buffer& buffer) {
+Status Request::from_buffer(Buffer& buffer) {
   Buffer::Byte b;
-  int st = buffer.readByte(&b);
+  int s = buffer.readByte(&b);
   if (s != 0) {
     return Status(Status::Code::SERIALIZATION_FAILURE);
   }
 
-  if (b == ReqType::REQ_GET ||
-      b == ReqType::REQ_SET ||
-      b == ReqType::REQ_DEL) {
-    type = b;
-    s = buffer.readInt(&key_len);
+  ReqType rt = (ReqType)b;
+  if (rt == ReqType::REQ_GET ||
+      rt == ReqType::REQ_SET ||
+      rt == ReqType::REQ_DEL) {
+    int ts = 0;
+    type = rt;
+    s = buffer.readInt(&ts);
     if (s != 0) {
       return Status(Status::Code::SERIALIZATION_FAILURE);
     }
+    key_len = ts;
 
     key = new char[key_len];
     s = buffer.read(key, key_len);
@@ -32,11 +35,12 @@ Status from_buffer(const Buffer& buffer) {
       return Status(Status::Code::SERIALIZATION_FAILURE);
     }
 
-    if (b == ReqType::REQ_SET) {
-      s = buffer.readInt(&val_len);
+    if (rt == ReqType::REQ_SET) {
+      s = buffer.readInt(&ts);
       if (s != 0) {
         return Status(Status::Code::SERIALIZATION_FAILURE);
       }
+      val_len = ts;
 
       value = new char[val_len];
       s = buffer.read(value, val_len);
@@ -52,11 +56,11 @@ Status from_buffer(const Buffer& buffer) {
 
 Buffer Request::to_buffer() {
   Buffer buffer;
-  buffer.writeByte(type);
+  buffer.writeByte((Buffer::Byte)type);
   buffer.writeString(key, key_len);
 
   if (type == ReqType::REQ_SET) {
-    buffer.writeString(value, val_ken);
+    buffer.writeString(value, val_len);
   }
   return buffer;
 }

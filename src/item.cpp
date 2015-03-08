@@ -1,4 +1,5 @@
 #include "dkv/item.hpp"
+#include <string.h>
 
 namespace dkv {
 
@@ -28,9 +29,9 @@ void Item::update_key(const char* key, int klen) {
   }
 
   key_size_ = klen;
-  item_size+ = key_size_ + value_size_ + sizeof(Item);
+  item_size_ += key_size_ + value_size_ + sizeof(Item);
 
-  tmp = new char[key_size_ + value_size_];
+  char* tmp = new char[key_size_ + value_size_];
 
   key_ = tmp;
 
@@ -51,7 +52,7 @@ void Item::update_value(const char* value, int vlen) {
   value_size_ = vlen;
   item_size_ = key_size_ + value_size_ + sizeof(Item);
 
-  tmp = new char[key_size_ + value_size_];
+  char* tmp = new char[key_size_ + value_size_];
 
   key_ = tmp;
   value_ = tmp + key_size_;

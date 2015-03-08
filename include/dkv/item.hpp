@@ -2,6 +2,8 @@
 #define __DKV_ITEM_HPP__
 
 #include "dkv/util.hpp"
+#include <stdint.h>
+#include <string>
 
 namespace dkv {
 
@@ -32,7 +34,7 @@ class Item {
     char     *key_;
     uint16_t key_size_;
     char     *value_;
-    uint16_t value_size;
+    uint16_t value_size_;
 
     uint16_t item_size_; // item size = key size + value size + sizof(Item)
     char     *data_;

@@ -20,14 +20,14 @@ Item* Stdmap::del(char* key, uint16_t key_len) {
   if (r == nullptr) {
     return r;
   }
-  erase(str_key);
+  table_.erase(str_key);
   return r;
 }
 
 Status Stdmap::set(char* key, uint16_t key_len, char* value, uint16_t val_len) {
   std::string str_key(key, key_len);
   if (table_.count(str_key) != 0) {
-    return Status(Status::Code::MAP_DUPLICATE_KEY);
+    return Status(Status::Code::MAP_KEY_DUPLICATE);
   }
 
   Item* v = new Item(key, key_len, value, val_len);

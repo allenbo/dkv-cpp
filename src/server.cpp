@@ -10,9 +10,9 @@ Server::Server(std::string addr)
   channels_.clear();
 }
 
-Served::~Server() {
+Server::~Server() {
   if (!stop_){
-    stop()
+    stop();
   }
   
   delete acceptor_;
@@ -23,22 +23,22 @@ Status Server::start() {
   Channel* ch = nullptr;
   bool timeouted = false;
   while (!stop_) {
-    if (!timeout) {
+    if (!timeouted) {
       ch = new Channel(true); //create an async channel
     }
     struct timeval tv;
     tv.tv_sec = 0;
     tv.tv_usec = 1000; // 1ms
 
-    Status st = acceptor_->accept(ch, tv);
+    int st = acceptor_->accept(ch, tv);
 
-    if (!st.ok()) {
+    if (st != 0) {
       // timeout
       timeouted = true;
       continue;
     }
 
-    timeoutd = false;
+    timeouted = false;
 
     ch->set_async_handler(this);
 
@@ -61,8 +61,8 @@ Status Server::stop() {
 
   auto it = channels_.begin();
   for(; it != channels_.end(); it ++) {
-    it->close();
-    delete it;
+    it->second->close();
+    delete it->second;
   }
   channels_.clear();
   return Status();
@@ -78,7 +78,7 @@ void Server::on_send_complete(Channel* ch) {
 void Server::on_channel_close(Channel* ch) {
 }
 
-void Server::handle_request(Channel* ch, Buffer& buf) {
+void Server::handle_request(Channel* ch, Buffer buf) {
   Request req;
   Status st = req.from_buffer(buf);
 
