@@ -20,6 +20,8 @@ class Status {
       PROTO_ERROR,
 
       SERIALIZATION_FAILURE,
+
+      NETWORKING_ERROR,
     };
 
     Status() : code_(Code::OK) {}
