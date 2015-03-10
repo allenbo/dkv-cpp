@@ -16,7 +16,7 @@ CFLAG := -g -Wall -std=c++11
 LFLAG := -g -lpthread
 
 THIRDPARTY_INCLUDE := -I../common/include/ -I../networking/include
-THIRDPARTY_LIB := -L../networking/
+THIRDPARTY_LIB := -L../networking/ -lnetworking
 
 SRC := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ := $(patsubst %.cpp,%.o, $(subst $(SRC_DIR),$(BUILD_DIR), $(SRC)))
@@ -49,7 +49,7 @@ $(TESTBIN_DIR)/%:$(TEST_SRC_DIR)/%.cpp $(OBJ)
 	$(CPP) $^ $(CFLAG) $(LFLAG) -o $@ -I$(INCLUDE_DIR) -L$(BUILD_DIR) $(THIRDPARTY_INCLUDE) $(THIRDPARTY_LIB)
 
 $(APPBIN_DIR)/%:$(APP_SRC_DIR)/%.cpp $(ARCHIVE)
-	$(CPP) $^ $(CFLAG) $(LFLAG) -o $@ -I$(INCLUDE_DIR) -L$(BUILD_DIR) $(THIRDPARTY_INCLUDE) $(THIRDPARTY_LIB)
+	$(CPP) $^ $(OBJ) $(CFLAG) $(LFLAG) -o $@ -I$(INCLUDE_DIR) -L$(BUILD_DIR) $(THIRDPARTY_INCLUDE) $(THIRDPARTY_LIB)
 
 clean:
 	rm -rf $(BUILD_DIR) $(TESTBIN_DIR) $(ARCHIVE) $(APPBIN_DIR)

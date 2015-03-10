@@ -8,7 +8,7 @@ namespace dkv {
 
 class Hashtable {
   public:
-    virtual ~Hashtable();
+    virtual ~Hashtable() {};
 
     /* @return pointer to item if the key exists */
     virtual Item* get(char* key, uint16_t key_len) = 0;
