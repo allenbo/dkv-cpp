@@ -79,7 +79,7 @@ Status Client::del(std::string& key) {
 Status Client::set(std::string& key, std::string& value) {
   // send out del request
   Request req;
-  req.type = ReqType::REQ_DEL;
+  req.type = ReqType::REQ_SET;
   req.key = (char*)key.c_str();
   req.key_len = key.size();
   req.value = (char*)value.c_str();

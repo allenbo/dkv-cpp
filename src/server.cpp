@@ -73,9 +73,14 @@ void Server::on_recv_complete(Channel* ch, Buffer buf) {
 }
 
 void Server::on_send_complete(Channel* ch) {
+  LOG(DEBUG) << "On send complete" << std::endl;
+  ch->irecv();
 }
 
 void Server::on_channel_close(Channel* ch) {
+  ch->close();
+  channels_.erase(ch->socket());
+  delete ch;
 }
 
 void Server::handle_request(Channel* ch, Buffer buf) {
