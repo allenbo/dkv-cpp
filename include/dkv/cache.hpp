@@ -3,6 +3,7 @@
 
 #include "dkv/status.hpp"
 #include "dkv/hashtable.hpp"
+#include "dkv/listlru.hpp"
 #include "dkv/item.hpp"
 #include "dkv/request.hpp"
 #include "networking/buffer.hpp"
@@ -20,6 +21,7 @@ class Cache {
   private:
 
     Hashtable     *table_;
+    ListLRU       *lru_;
     common::Mutex *lock_;
 
     // no copy

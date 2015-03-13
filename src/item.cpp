@@ -3,7 +3,8 @@
 
 namespace dkv {
 
-Item::Item(const char* key, int klen, const char* value, int vlen) {
+Item::Item(const char* key, int klen, const char* value, int vlen)
+    : prev(nullptr), next(nullptr) {
   update(key, klen, value, vlen);
 }
 Item::~Item() {

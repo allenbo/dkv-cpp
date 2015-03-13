@@ -13,9 +13,9 @@ class Stdmap : public  Hashtable {
     Stdmap();
     ~Stdmap();
 
-    Item* get(char* key, uint16_t key_len);
-    Item* del(char* key, uint16_t key_len);
-    Status set(char* key, uint16_t key_len, char* value, uint16_t val_len);
+    Item* get(const char* key, uint16_t key_len);
+    Item* del(const char* key, uint16_t key_len);
+    Status set(const char* key, uint16_t key_len, Item* item);
 
   private:
     std::unordered_map<std::string, Item*> table_;
