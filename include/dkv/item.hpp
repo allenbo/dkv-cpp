@@ -38,6 +38,11 @@ class Item {
 
     uint16_t item_size_; // item size = key size + value size + sizof(Item)
     char     *data_;
+
+  // add for lru
+  public:
+    Item* prev;
+    Item* next;
 };
 
 }

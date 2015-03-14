@@ -22,6 +22,8 @@ class Status {
       SERIALIZATION_FAILURE,
 
       NETWORKING_ERROR,
+
+      LRU_DEFICIT_MEMORY,
     };
 
     Status() : code_(Code::OK) {}

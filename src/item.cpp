@@ -3,12 +3,13 @@
 
 namespace dkv {
 
-Item::Item(const char* key, int klen, const char* value, int vlen) {
+Item::Item(const char* key, int klen, const char* value, int vlen)
+    : prev(nullptr), next(nullptr) {
   update(key, klen, value, vlen);
 }
 Item::~Item() {
   if (data_) {
-    delete data_;
+    delete []data_;
     data_ = key_ = value_ = nullptr;
     key_size_ = value_size_ = item_size_ = 0;
   }

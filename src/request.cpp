@@ -29,8 +29,9 @@ Status Request::from_buffer(Buffer& buffer) {
     }
     key_len = ts;
 
-    key = new char[key_len];
+    key = new char[key_len + 1];
     s = buffer.read(key, key_len);
+    key[key_len] = 0;
     if (s != 0) {
       return Status(Status::Code::SERIALIZATION_FAILURE);
     }
@@ -42,8 +43,9 @@ Status Request::from_buffer(Buffer& buffer) {
       }
       val_len = ts;
 
-      value = new char[val_len];
+      value = new char[val_len + 1];
       s = buffer.read(value, val_len);
+      value[val_len] = 0;
       if (s != 0) {
         return Status(Status::Code::SERIALIZATION_FAILURE);
       }
