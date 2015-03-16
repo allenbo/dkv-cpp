@@ -20,9 +20,9 @@ Status Cache::process(Request& req, networking::Buffer& res) {
   Item* r = nullptr;
   Status st;
 
-  switch(req.type) {
+  switch(req.type_) {
     case ReqType::REQ_GET:
-      r = table_->get(req.key, req.key_len);
+      r = table_->get(req.get.key, req.get.key_len);
       if (r == nullptr) {
         return Status(Status::Code::MAP_KEY_MISSING);
       }
@@ -34,14 +34,14 @@ Status Cache::process(Request& req, networking::Buffer& res) {
       break;
 
     case ReqType::REQ_SET:
-      while (!lru_->check(req.key_len, req.val_len) ) {
+      while (!lru_->check(req.set.key_len, req.set.val_len) ) {
         r = lru_->discard();
         table_->del(r->key(), r->key_size());
         delete r;
       }
 
-      r = new Item(req.key, req.key_len, req.value, req.val_len);
-      st = table_->set(req.key, req.key_len, r);
+      r = new Item(req.set.key, req.set.key_len, req.set.value, req.set.val_len);
+      st = table_->set(req.set.key, req.set.key_len, r);
       if (!st.ok()) {
         delete r;
         return st;
@@ -52,7 +52,7 @@ Status Cache::process(Request& req, networking::Buffer& res) {
       break;
 
     case ReqType::REQ_DEL:
-      r = table_->del(req.key, req.key_len);
+      r = table_->del(req.del.key, req.del.key_len);
       if (r == nullptr) {
         return Status(Status::Code::MAP_KEY_MISSING);
       }
@@ -61,7 +61,6 @@ Status Cache::process(Request& req, networking::Buffer& res) {
       delete r;
       return Status();
       break;
-
   }
   return Status(Status::Code::PROTO_ERROR);
 }

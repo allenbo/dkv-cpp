@@ -10,14 +10,9 @@ Client::Client(std::string addr)
 
 Status Client::get(std::string& key, std::string* value) {
   // send out get request
-  Request req;
-  req.type = ReqType::REQ_GET;
-  req.key = (char*)key.c_str();
-  req.key_len = key.size();
-
+  Request req = Request::Get(key);
+  
   int st = ch_->send(req.to_buffer());
-  req.key = nullptr;
-  req.key_len = 0;
   if (st != 0) {
     return Status(Status::Code::NETWORKING_ERROR);
   }
@@ -49,14 +44,9 @@ Status Client::get(std::string& key, std::string* value) {
 
 Status Client::del(std::string& key) {
   // send out del request
-  Request req;
-  req.type = ReqType::REQ_DEL;
-  req.key = (char*)key.c_str();
-  req.key_len = key.size();
+  Request req = Request::Get(key);
 
   int st = ch_->send(req.to_buffer());
-  req.key = nullptr;
-  req.key_len = 0;
   if (st != 0) {
     return Status(Status::Code::NETWORKING_ERROR);
   }
@@ -78,18 +68,9 @@ Status Client::del(std::string& key) {
 
 Status Client::set(std::string& key, std::string& value) {
   // send out del request
-  Request req;
-  req.type = ReqType::REQ_SET;
-  req.key = (char*)key.c_str();
-  req.key_len = key.size();
-  req.value = (char*)value.c_str();
-  req.val_len = value.size();
+  Request req = Request::Set(key, value);
 
   int st = ch_->send(req.to_buffer());
-  req.key = nullptr;
-  req.key_len = 0;
-  req.value = nullptr;
-  req.val_len = 0;
   if (st != 0) {
     return Status(Status::Code::NETWORKING_ERROR);
   }
