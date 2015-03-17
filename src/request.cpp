@@ -102,7 +102,7 @@ Request Request::Dels(std::vector<std::string>& keys) {
   Request r;
   r.type_    = ReqType::REQ_DELS;
   r.isowner_ = false;
-  r.gets.n   = keys.size();
+  r.dels.n   = keys.size();
   for (size_t i = 0 ; i < keys.size(); i ++ ) {
     r.dels.keys[i] = (char*)keys[i].c_str();
     r.dels.key_lens[i] = keys[i].size();
@@ -117,7 +117,7 @@ Request Request::Sets(std::vector<std::string>& keys, std::vector<std::string>& 
 
   r.type_    = ReqType::REQ_SETS;
   r.isowner_ = false;
-  r.gets.n   = keys.size();
+  r.sets.n   = keys.size();
   for (size_t i = 0 ; i < keys.size(); i ++ ) {
     r.sets.keys[i] = (char*)keys[i].c_str();
     r.sets.key_lens[i] = keys[i].size();
@@ -134,7 +134,7 @@ Request Request::Updates(std::vector<std::string>& keys, std::vector<std::string
 
   r.type_    = ReqType::REQ_UPDATES;
   r.isowner_ = false;
-  r.gets.n   = keys.size();
+  r.updates.n   = keys.size();
   for (size_t i = 0 ; i < keys.size(); i ++ ) {
     r.updates.keys[i] = (char*)keys[i].c_str();
     r.updates.key_lens[i] = keys[i].size();

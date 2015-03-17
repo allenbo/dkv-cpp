@@ -88,6 +88,30 @@ int main(int argc, char** argv) {
     LOG_IF(FATAL, !st.ok());
   }
 
+  // test for sets
+  std::vector<std::string> batch_keys;
+  std::vector<std::string> batch_values;
+  std::vector<std::string> rkeys;
+  for(int i = 0; i < MAJOR_TEST_SIZE; i ++ ) {
+    key = rand_string(rand() % (MAX_KEY_SIZE - MIN_KEY_SIZE ) + MIN_KEY_SIZE);
+    value = rand_string(rand() % (MAX_VALUE_SIZE - MIN_VALUE_SIZE ) + MIN_VALUE_SIZE);
+    keys.push_back(key);
+    values.push_back(value);
 
+    batch_keys.push_back(key);
+    batch_values.push_back(value);
+    if((i + 1) % 100 == 0 || i + 1 == MAJOR_TEST_SIZE) {
+      std::cout << "Batch Set " << (i+1) / 100 << std::endl;
+      st = clt.sets(batch_keys, batch_values, rkeys);
+
+      LOG_IF(FATAL, rkeys.size() != batch_keys.size());
+      for(int j = 0; j < rkeys.size(); j ++ ) {
+        LOG_IF(FATAL, rkeys[j] != batch_keys[j]);
+      }
+
+      batch_keys.clear();
+      batch_values.clear();
+    }
+  }
   
 }

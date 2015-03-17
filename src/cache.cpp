@@ -129,6 +129,7 @@ Status Cache::process(Request& req, networking::Buffer& res) {
         // if succeed, return key
         res.writeString(key, key_len);
       }
+      return Status();
 
     case ReqType::REQ_DELS:
       for(int i = 0; i < (int)req.dels.n; i ++ ) {

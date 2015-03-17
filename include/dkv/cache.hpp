@@ -13,7 +13,7 @@ namespace dkv {
 
 class Cache {
   public:
-    static const int64_t MAX_MEMORY = 2 * 1024 * 1024 * 1024; // 2 GB
+    static const int64_t MAX_MEMORY = (int64_t)(2 * 1024) * 1024 * 1024; // 2 GB
     Cache();
     ~Cache();
 
