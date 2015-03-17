@@ -13,7 +13,7 @@ namespace dkv {
 
 class Cache {
   public:
-    static const int64_t MAX_MEMORY = 1024 * 1024 * 1024; // 2GB
+    static const int64_t MAX_MEMORY = 2 * 1024 * 1024 * 1024; // 2 GB
     Cache();
     ~Cache();
 
@@ -26,6 +26,7 @@ class Cache {
     common::Mutex *lock_;
 
     int64_t       curr_mem_size_;
+    int64_t       nops_;
 
     // no copy
     Cache(const Cache&);

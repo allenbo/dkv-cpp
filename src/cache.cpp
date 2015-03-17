@@ -4,10 +4,11 @@
 namespace dkv {
 
 Cache::Cache()
-    : curr_mem_size_(0) {
+    : curr_mem_size_(0), nops_(0) {
   table_ = new Stdmap();
   lock_  = new common::Mutex();
   lru_   = new ListLRU();
+  
 }
 
 Cache::~Cache() {
@@ -22,6 +23,7 @@ Status Cache::process(Request& req, networking::Buffer& res) {
   Status st;
 
   int suc = 0;
+  LOG_EVERY_N(INFO, 1000) << "Memory " << curr_mem_size_ / 1024 << std::endl;
 
   switch(req.type_) {
     case ReqType::REQ_GET:
@@ -38,6 +40,7 @@ Status Cache::process(Request& req, networking::Buffer& res) {
     case ReqType::REQ_SET:
       r = table_->get(req.set.key, req.set.key_len);
       if (r != nullptr) {
+        LOG(INFO) << "Duplicate key" << std::endl;
         return Status(Status::Code::MAP_KEY_DUPLICATE);
       }
 

@@ -1,4 +1,5 @@
 #include "dkv/stdmap.hpp"
+#include <iostream>
 
 namespace dkv {
 
@@ -11,6 +12,10 @@ Stdmap::~Stdmap() {
 
 Item* Stdmap::get(const char* key, uint16_t key_len) {
   std::string str_key(key, key_len);
+  if (table_.count(str_key) == 0) {
+    return nullptr;
+  }
+
   return table_[str_key];
 }
 

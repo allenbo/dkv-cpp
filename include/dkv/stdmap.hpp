@@ -4,6 +4,7 @@
 #include "dkv/hashtable.hpp"
 
 #include <unordered_map>
+#include <map>
 
 namespace dkv {
 
@@ -17,7 +18,8 @@ class Stdmap : public  Hashtable {
     Status set(const char* key, uint16_t key_len, Item* item);
 
   private:
-    std::unordered_map<std::string, Item*> table_;
+    //std::unordered_map<std::string, Item*> table_;
+    std::map<std::string, Item*> table_;
 };
 
 }

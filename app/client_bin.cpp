@@ -1,5 +1,6 @@
 #include "dkv/client.hpp"
 #include "dkv/status.hpp"
+#include "common/all.hpp"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -10,10 +11,10 @@ using dkv::Status;
 
 const char* alphabet = "abcedefghijklmnopqrstuvwxyz";
 
-const int MIN_KEY_SIZE = 1;
+const int MIN_KEY_SIZE = 100;
 const int MAX_KEY_SIZE = 250;
 const int MIN_VALUE_SIZE = 1;
-const int MAX_VALUE_SIZE = 1024;
+const int MAX_VALUE_SIZE = 4 * 1024;
 
 const int MINOR_TEST_SIZE = 100;
 const int MAJOR_TEST_SIZE = 100 * 100;
@@ -46,10 +47,10 @@ int main(int argc, char** argv) {
     value = rand_string(rand() % (MAX_VALUE_SIZE - MIN_VALUE_SIZE ) + MIN_VALUE_SIZE);
     keys.push_back(key);
     values.push_back(value);
-    std::cout << "Set [" << key << "|" << value << "]" << std::endl;
+    std::cout << "Set [" << key << "| value ]" << std::endl;
 
     st = clt.set(key, value);
-    assert(st.ok());
+    LOG_IF(FATAL, !st.ok());
   }
 
   // test for get
@@ -58,7 +59,25 @@ int main(int argc, char** argv) {
     std::cout << "Get value for key [" << key << "]" << std::endl;
     st = clt.get(key, &value);
     assert(st.ok());
-    assert(value == values[i]);
+    LOG_IF(FATAL, !st.ok());
+    LOG_IF(FATAL, value != values[i]);
+  }
+
+  // test for update
+  for(int i = 0; i < MAJOR_TEST_SIZE; i ++ ) {
+    values[i] = rand_string(rand() % (MAX_VALUE_SIZE - MIN_VALUE_SIZE ) + MIN_VALUE_SIZE);
+    std::cout << "Update [" << keys[i] << "| value ]" << std::endl;
+    st = clt.update(keys[i], values[i]);
+    LOG_IF(FATAL, !st.ok());
+  }
+
+  for(int i = 0; i < MAJOR_TEST_SIZE; i ++ ) {
+    key = keys[i];
+    std::cout << "Get value for key [" << key << "]" << std::endl;
+    st = clt.get(key, &value);
+    assert(st.ok());
+    LOG_IF(FATAL, !st.ok());
+    LOG_IF(FATAL, value != values[i]);
   }
 
   // test for del
@@ -66,7 +85,9 @@ int main(int argc, char** argv) {
     key = keys[i];
     std::cout <<"Delete k/v [" << key << "]" << std::endl;
     st = clt.del(key);
-    assert(st.ok());
+    LOG_IF(FATAL, !st.ok());
   }
+
+
   
 }
