@@ -12,13 +12,8 @@ ListLRU::ListLRU()
 ListLRU::~ListLRU() {
 }
 
-bool ListLRU::check(int klen, int vlen) {
-  return klen + vlen + sizeof(Item) + curr_mem_size_ <= ListLRU::MEMORY_SIZE;
-}
-
 Status ListLRU::place(Item* item) {
   link(item);
-  curr_mem_size_ += item->size(); 
   return Status();
 }
 
@@ -46,7 +41,6 @@ Item* ListLRU::discard() {
     CHECK_EQ(tail_, head_);
     tail_ = head_ = nullptr;
   }
-  curr_mem_size_ -= r->size();
   return r;
 }
 
