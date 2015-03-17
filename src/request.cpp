@@ -292,7 +292,7 @@ Status Request::from_buffer(Buffer& buffer) {
   return Status();
 }
 
-Buffer Request::to_buffer() {
+Buffer Request::to_buffer()  const {
   Buffer buffer;
   buffer.writeByte((Buffer::Byte)type_);
 

@@ -31,7 +31,7 @@ class Request {
     Request();
     ~Request();
 
-    networking::Buffer to_buffer();
+    networking::Buffer to_buffer() const ;
 
     Status from_buffer(networking::Buffer& buffer);
 

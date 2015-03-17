@@ -162,6 +162,7 @@ Status Cache::process(Request& req, networking::Buffer& res) {
           curr_mem_size_ += val_len - r->value_size();
           r->update_value(value, val_len);
           lru_->update(r);
+          res.writeString(key, key_len);
         }
       }
       return Status();
